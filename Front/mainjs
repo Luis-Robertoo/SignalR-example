@@ -1,0 +1,44 @@
+
+
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("http://localhost:8080/conteudo")
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
+
+const salas = document.getElementById("conteudo");
+    
+
+async function start() {
+    
+    try {
+        await connection.start();
+        console.log("SignalR Connected - Id: " + connection.connection.connectionId);
+    } catch (err) {
+        console.log(err);
+        setTimeout(start, 5000);
+    }
+};
+
+async function EntraNoGrupo(){
+    await connection.invoke("AddToGroup", "Usuarios")
+}
+
+async function EnviaMensagem(){
+    await connection.invoke("WaitForMessage", connection.connection.connectionId)
+}
+
+connection.on("Send", (conteudo) => {
+    console.log("recebi: "+ conteudo)
+});
+
+connection.on("mostra", (conteudo) => {
+    salas.innerText = JSON.stringify(conteudo);
+    console.log(conteudo)
+});
+
+connection.on("mensagem", (conteudo) => {
+    return "macaxeira"
+});
+
+start();
+
