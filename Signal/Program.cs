@@ -20,12 +20,11 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
         }));
 
 builder.Services.AddSingleton<IUsersService, UsersService>();
+builder.Services.AddSingleton<IDadosHub, DadosHub>();
 
 var app = builder.Build();
 
 app.UseCors("CorsPolicy");
-
-// Global cors policy
 
 
 if (app.Environment.IsDevelopment())
@@ -42,8 +41,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<DadosHub>("/conteudo");
 });
 
-//app.UseAuthorization();
-
 app.MapControllers();
-//app.MapHub<DadosHub>("/conteudo");
 app.Run();

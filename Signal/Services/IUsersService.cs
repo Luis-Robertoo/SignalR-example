@@ -5,6 +5,6 @@ namespace Signal.Services;
 public interface IUsersService
 {
     Task<Sala> CreateOrUpdateSala(string nomeDaSala, string idUsuario);
-    Task<Sala> RemoveUser(string idUsuario);
-    Task<Sala> GetSala(string nomeDaSala);
+    Task<Sala?> RemoveUser(string idUsuario);
+    Task<Sala> GetSalaForName(string nomeDaSala);
 }

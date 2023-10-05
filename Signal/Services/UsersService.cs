@@ -15,7 +15,7 @@ public class UsersService : IUsersService
         _cache = new MemoryCache(op);
     }
 
-    public async Task<Sala> GetSala(string nomeDaSala)
+    public async Task<Sala> GetSalaForName(string nomeDaSala)
     {
         var sala = _cache.Get(nomeDaSala) as Sala;
         return sala;
@@ -45,9 +45,12 @@ public class UsersService : IUsersService
         return sala;
     }
 
-    public async Task<Sala> RemoveUser(string idUsuario)
+    public async Task<Sala?> RemoveUser(string idUsuario)
     {
+
         var nome = _cache.Get("nome");
+        if (nome is null) return null;
+
         var sala = _cache.Get(nome) as Sala;
         sala.Users.RemoveAll(u => u.Id == idUsuario);
         _cache.Set(nome, sala);

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Signal.Hubs;
 using Signal.Services;
 
 namespace Signal.Controllers;
@@ -8,17 +10,19 @@ namespace Signal.Controllers;
 public class DadosController : ControllerBase
 {
     private readonly IUsersService _usersService;
-    public DadosController(IUsersService usersService)
+    private readonly IHubContext<DadosHub> _hubContext;
+
+    public DadosController(IUsersService usersService, IHubContext<DadosHub> hubContext)
     {
         _usersService = usersService;
+        _hubContext = hubContext;
     }
 
-
     [HttpGet]
-    public async Task<ActionResult> Jogo([FromQuery] string nomeDaSala)
+    public async Task<ActionResult> Jogo([FromQuery] string message)
     {
-
-        return Ok("olá");
+        await _hubContext.Clients.All.SendAsync("Send", $"Todos - API - Mensagem: {message}");
+        return Ok();
     }
 
 }
